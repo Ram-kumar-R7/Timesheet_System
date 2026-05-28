@@ -1,0 +1,11 @@
+ID,EmpNo,Name,Email,Department,HourlyRate,Skills
+11111111-1111-4111-8111-111111111111,E001,Ram Kumar,ram@company.com,SAP,1500,"CAP,Fiori,HANA"
+22222222-2222-4222-8222-222222222222,E002,Arun,arun@company.com,Backend,2000,"Node.js,API,HANA"
+33333333-3333-4333-8333-333333333333,E003,John,john@company.com,Management,2500,"Project Management,Approval"
+44444444-1111-4111-8111-444444444444,E004,Priya,priya@company.com,Frontend,1800,"UI5,Fiori,JavaScript"
+55555555-1111-4111-8111-555555555555,E005,Vikram,vikram@company.com,Testing,1600,"Automation,Selenium"
+66666666-1111-4111-8111-666666666666,E006,Sneha,sneha@company.com,DevOps,2200,"CI/CD,Docker,Kubernetes"
+77777777-1111-4111-8111-777777777777,E007,Karthik,karthik@company.com,SAP,2100,"CAPM,OData,Fiori"
+88888888-1111-4111-8111-888888888888,E008,Meena,meena@company.com,Analytics,2300,"PowerBI,SAC,HANA"
+99999999-1111-4111-8111-999999999999,E009,Rajesh,rajesh@company.com,Security,2400,"OAuth,XSUAA,JWT"
+aaaaaaaa-2222-4222-8222-aaaaaaaaaaaa,E010,Divya,divya@company.com,Cloud,2600,"BTP,CF,Integration"

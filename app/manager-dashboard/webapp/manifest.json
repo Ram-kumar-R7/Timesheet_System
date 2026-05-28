@@ -1,0 +1,187 @@
+{
+  "_version": "1.85.0",
+  "sap.app": {
+    "id": "TMS.managerdashboard",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "Manager Dashboard",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.25.0",
+      "toolsId": "1752b5d9-30c9-464e-a7e9-e3a0611db263"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/timesheet/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "managerdashboard-manage": {
+          "semanticObject": "managerdashboard",
+          "action": "manage",
+          "title": "{{managerdashboard-manage.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.148.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "managerdashboard.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "PendingTimesheetsList",
+          "target": "PendingTimesheetsList"
+        },
+        {
+          "pattern": "PendingTimesheets({key}):?query:",
+          "name": "PendingTimesheetsObjectPage",
+          "target": "PendingTimesheetsObjectPage"
+        },
+        {
+          "pattern": "PendingTimesheets({key})/Entries({key2}):?query:",
+          "name": "TimesheetEntriesObjectPage",
+          "target": "TimesheetEntriesObjectPage"
+        }
+      ],
+      "targets": {
+        "PendingTimesheetsList": {
+          "type": "Component",
+          "id": "PendingTimesheetsList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "initialLoad": "Enabled",
+              "contextPath": "/PendingTimesheets",
+              "variantManagement": "None",
+              "navigation": {
+                "PendingTimesheets": {
+                  "detail": {
+                    "route": "PendingTimesheetsObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "PendingTimesheetsObjectPage": {
+          "type": "Component",
+          "id": "PendingTimesheetsObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/PendingTimesheets",
+              "navigation": {
+                "Entries": {
+                  "detail": {
+                    "route": "TimesheetEntriesObjectPage"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "TimesheetEntriesObjectPage": {
+          "type": "Component",
+          "id": "TimesheetEntriesObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/PendingTimesheets/Entries"
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "TMS.service"
+  }
+}

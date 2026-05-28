@@ -1,0 +1,213 @@
+_schema-version: 3.3.0
+ID: TMS
+version: 1.0.0
+description: "A simple CAP project."
+parameters:
+  enable-parallel-deployments: true
+  deploy_mode: html5-repo
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+modules:
+  - name: TMS-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      instances: 1
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm-ci
+    provides:
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: TMS-auth
+      - name: TMS-db
+      - name: TMS-destination
+
+  - name: TMS-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: TMS-db
+  - name: TMS
+    type: approuter.nodejs
+    path: app/router
+    parameters:
+      keep-existing-routes: true
+      disk-quota: 256M
+      memory: 256M
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api # must be used in xs-app.json as well
+          url: ~{srv-url}
+          forwardAuthToken: true
+      - name: TMS-auth
+      - name: TMS-html5-runtime
+    provides:
+      - name: app-api
+        properties:
+          app-protocol: ${protocol}
+          app-uri: ${default-uri}
+
+  - name: TMS-app-deployer
+    type: com.sap.application.content
+    path: gen
+    build-parameters:
+      build-result: app/
+      requires:
+        - name: TMSemployeetimesheet
+          artifacts:
+            - employee-timesheet.zip
+          target-path: app/
+        - name: TMSmanagerdashboard
+          artifacts:
+            - manager-dashboard.zip
+          target-path: app/
+        - name: TMSprojectdashboard
+          artifacts:
+            - project-dashboard.zip
+          target-path: app/
+    requires:
+      - name: TMS-auth
+      - name: srv-api
+      - name: TMS-html5-repo-host
+        parameters:
+          content-target: true
+          config:
+            HTML5Runtime_enabled: true
+    parameters:
+      config:
+        destinations:
+          - Name: srv-api
+            URL: ~{srv-api/srv-url}
+            Authentication: NoAuthentication
+            Type: HTTP
+            ProxyType: Internet
+            HTML5.ForwardAuthToken: true
+            HTML5.DynamicDestination: true
+
+  - name: TMSemployeetimesheet
+    type: html5
+    path: app/employee-timesheet
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm ci
+        - npm run build
+      supported-platforms:
+        []
+  - name: TMSmanagerdashboard
+    type: html5
+    path: app/manager-dashboard
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm ci
+        - npm run build
+      supported-platforms:
+        []
+  - name: TMSprojectdashboard
+    type: html5
+    path: app/project-dashboard
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm ci
+        - npm run build
+      supported-platforms:
+        []
+
+  - name: TMS-destinations
+    type: com.sap.application.content
+    requires:
+      - name: TMS-auth
+        parameters:
+          service-key:
+            name: TMS-auth-key
+      - name: TMS-html5-repo-host
+        parameters:
+          service-key:
+            name: TMS-html5-repo-host-key
+      - name: srv-api
+      - name: TMS-destination
+        parameters:
+          content-target: true
+    build-parameters:
+      no-source: true
+    parameters:
+      content:
+        instance:
+          existing_destinations_policy: update
+          destinations:
+            - Name: TMS-html5-repository
+              ServiceInstanceName: TMS-html5-repo-host
+              ServiceKeyName: TMS-html5-repo-host-key
+              sap.cloud.service: TMS.service
+            - Name: TMS-auth
+              Authentication: OAuth2UserTokenExchange
+              ServiceInstanceName: TMS-auth
+              ServiceKeyName: TMS-auth-key
+              sap.cloud.service: TMS.service
+
+resources:
+  - name: TMS-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: TMS-${org}-${space}
+        tenant-mode: dedicated
+        oauth2-configuration:
+          credential-types:
+            - "binding-secret"
+            - "x509"
+          redirect-uris:
+            - https://*~{app-api/app-uri}/**
+        role-collections:
+          - name: 'Employee (TMS ${org}-${space})'
+            description: 'generated'
+            role-template-references:
+              - '$XSAPPNAME.Employee'
+          - name: 'manager (TMS ${org}-${space})'
+            description: 'generated'
+            role-template-references:
+              - '$XSAPPNAME.manager'
+    requires:
+      - name: app-api
+  - name: TMS-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+  - name: TMS-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
+    requires:
+      - name: srv-api
+
+  - name: TMS-html5-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+  - name: TMS-html5-runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-runtime
