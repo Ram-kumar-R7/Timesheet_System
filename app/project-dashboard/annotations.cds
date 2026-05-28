@@ -390,6 +390,7 @@ annotate service.Projects with {
                 $Type            : 'Common.ValueListParameterDisplayOnly',
                 ValueListProperty: 'Department',
             },
+      
         ],
     }
 };
