@@ -3,7 +3,6 @@ using ProjectService as service from '../../srv/project';
 
 annotate service.Projects with @(
     
-    
     UI.FieldGroup #ProjectDetails: {
         $Type: 'UI.FieldGroupType',
         Data : [
@@ -123,26 +122,29 @@ annotate service.Projects with @(
             $Type : 'UI.DataFieldForAction',
             Label : 'Start Project',
             Action: 'ProjectService.startProject',
-            Inline: true
+            Inline: true,
+           
         },
 
         {
             $Type : 'UI.DataFieldForAction',
             Label : 'Complete Project',
             Action: 'ProjectService.completeProject',
-            Inline: true
+            Inline: true,
+            Criticality:#Positive   
         }
     ],
     UI.Identification            : [
         {
             $Type : 'UI.DataFieldForAction',
             Label : 'Start Project',
-            Action: 'ProjectService.startProject'
+            Action: 'ProjectService.startProject', 
         },
         {
             $Type : 'UI.DataFieldForAction',
             Label : 'Complete Project',
-            Action: 'ProjectService.completeProject'
+            Action: 'ProjectService.completeProject',
+            Criticality:#Positive
         }
     ],
     Analytics.AggregatedProperty #Budget_max : {

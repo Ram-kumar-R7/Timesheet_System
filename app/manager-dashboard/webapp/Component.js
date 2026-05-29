@@ -3,7 +3,7 @@ sap.ui.define(
     function (Component) {
         "use strict";
 
-        return Component.extend("managerdashboard.Component", {
+        return Component.extend("TMS.managerdashboard.Component", {
             metadata: {
                 manifest: "json"
             }

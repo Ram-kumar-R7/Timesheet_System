@@ -76,7 +76,8 @@ annotate service.Timesheets with @(
     UI.Identification             : [{
         $Type : 'UI.DataFieldForAction',
         Label : 'Submit',
-        Action: 'TimesheetService.submitTimesheet'
+        Action: 'TimesheetService.submitTimesheet',
+        Criticality: #Positive
     }],
     UI.Facets                     : [
         {
@@ -135,7 +136,8 @@ annotate service.Timesheets with @(
             $Type : 'UI.DataFieldForAction',
             Label : 'Submit',
             Action: 'TimesheetService.submitTimesheet',
-            Inline: true
+            Inline: true,
+            Criticality: #Positive
         },
     ],
 );

@@ -1,137 +1,3 @@
-// using TimesheetService as service from '../../srv/timesheet';
-// annotate service.PendingTimesheets with @(
-//     UI.FieldGroup #GeneratedGroup : {
-//         $Type : 'UI.FieldGroupType',
-//         Data : [
-//             {
-//                 $Type : 'UI.DataField',
-//                 Label : 'TimesheetNo',
-//                 Value : TimesheetNo,
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Label : 'WeekStartDate',
-//                 Value : WeekStartDate,
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Label : 'Status',
-//                 Value : Status,
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Label : 'TotalHours',
-//                 Value : TotalHours,
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Label : 'ApprovalComments',
-//                 Value : ApprovalComments,
-//             },
-//             {
-//                 $Type : 'UI.DataField',
-//                 Label : 'StatusCriticality',
-//                 Value : StatusCriticality,
-//             },
-//         ],
-//     },
-//     UI.Facets : [
-//         {
-//             $Type : 'UI.ReferenceFacet',
-//             ID : 'GeneratedFacet1',
-//             Label : 'General Information',
-//             Target : '@UI.FieldGroup#GeneratedGroup',
-//         },
-//     ],
-//     UI.LineItem : [
-//         {
-//             $Type : 'UI.DataField',
-//             Label : 'TimesheetNo',
-//             Value : TimesheetNo,
-//         },
-//         {
-//             $Type : 'UI.DataField',
-//             Label : 'WeekStartDate',
-//             Value : WeekStartDate,
-//         },
-//         {
-//             $Type : 'UI.DataField',
-//             Label : 'Status',
-//             Value : Status,
-//         },
-//         {
-//             $Type : 'UI.DataField',
-//             Label : 'TotalHours',
-//             Value : TotalHours,
-//         },
-//         {
-//             $Type : 'UI.DataField',
-//             Label : 'ApprovalComments',
-//             Value : ApprovalComments,
-//         },
-//     ],
-// );
-
-// annotate service.PendingTimesheets with {
-//     Employee @Common.ValueList : {
-//         $Type : 'Common.ValueListType',
-//         CollectionPath : 'Employees',
-//         Parameters : [
-//             {
-//                 $Type : 'Common.ValueListParameterInOut',
-//                 LocalDataProperty : Employee_ID,
-//                 ValueListProperty : 'ID',
-//             },
-//             {
-//                 $Type : 'Common.ValueListParameterDisplayOnly',
-//                 ValueListProperty : 'EmpNo',
-//             },
-//             {
-//                 $Type : 'Common.ValueListParameterDisplayOnly',
-//                 ValueListProperty : 'Name',
-//             },
-//             {
-//                 $Type : 'Common.ValueListParameterDisplayOnly',
-//                 ValueListProperty : 'Email',
-//             },
-//             {
-//                 $Type : 'Common.ValueListParameterDisplayOnly',
-//                 ValueListProperty : 'Department',
-//             },
-//         ],
-//     }
-// };
-
-// annotate service.PendingTimesheets with {
-//     ApprovedBy @Common.ValueList : {
-//         $Type : 'Common.ValueListType',
-//         CollectionPath : 'Employees',
-//         Parameters : [
-//             {
-//                 $Type : 'Common.ValueListParameterInOut',
-//                 LocalDataProperty : ApprovedBy_ID,
-//                 ValueListProperty : 'ID',
-//             },
-//             {
-//                 $Type : 'Common.ValueListParameterDisplayOnly',
-//                 ValueListProperty : 'EmpNo',
-//             },
-//             {
-//                 $Type : 'Common.ValueListParameterDisplayOnly',
-//                 ValueListProperty : 'Name',
-//             },
-//             {
-//                 $Type : 'Common.ValueListParameterDisplayOnly',
-//                 ValueListProperty : 'Email',
-//             },
-//             {
-//                 $Type : 'Common.ValueListParameterDisplayOnly',
-//                 ValueListProperty : 'Department',
-//             },
-//         ],
-//     }
-// };
-
 
 using TimesheetService as service from '../../srv/timesheet';
 
@@ -246,25 +112,29 @@ annotate service.PendingTimesheets with @(
             $Type : 'UI.DataFieldForAction',
             Label : 'Approve',
             Action: 'TimesheetService.approveTimesheet',
-            Inline: true
+            Inline: true,
+            Criticality: #Positive
         },
         {
             $Type : 'UI.DataFieldForAction',
             Label : 'Reject',
             Action: 'TimesheetService.rejectTimesheet',
-            Inline: true
+            Inline: true,
+            Criticality:#Negative
         }
     ],
      UI.Identification             : [
         {
             $Type : 'UI.DataFieldForAction',
             Label : 'Approve',
-            Action: 'TimesheetService.approveTimesheet'
+            Action: 'TimesheetService.approveTimesheet',
+            Criticality: #Positive
         },
         {
             $Type : 'UI.DataFieldForAction',
             Label : 'Reject',
-            Action: 'TimesheetService.rejectTimesheet'
+            Action: 'TimesheetService.rejectTimesheet',
+            Criticality:#Negative
         }
     ],
 );
