@@ -131,7 +131,7 @@ annotate service.Projects with @(
             Label : 'Complete Project',
             Action: 'ProjectService.completeProject',
             Inline: true,
-            Criticality:#Positive   
+            Criticality:#Positive  
         }
     ],
     UI.Identification            : [
